@@ -1,0 +1,19 @@
+{
+  "name": "analysis-runner-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "runner:create": "node --import tsx src/cli/cli.ts create",
+    "runner:list": "node --import tsx src/cli/cli.ts list",
+    "runner:list-status": "node --import tsx src/cli/cli.ts list-status",
+    "runner:show": "node --import tsx src/cli/cli.ts show",
+    "runner:analysis": "node --import tsx src/cli/analysis-pipeline-cli.ts",
+    "runner:deliver": "node --import tsx src/cli/delivery-cli.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.2",
+    "@types/node": "^22.13.10"
+  }
+}
