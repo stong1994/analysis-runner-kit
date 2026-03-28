@@ -30,34 +30,53 @@ lobster version
 lobster --help
 ```
 
-## 4. Go to the project directory
+## 4. Go to the starter kit directory
 
 ```bash
-cd openclaw-control-center
+cd analysis-runner-kit
 ```
 
-## 5. Run the workflow
+## 5. Install starter kit dependencies
+
+```bash
+npm install
+```
+
+## 6. Run the workflow
 
 Example:
 
 ```bash
-lobster run lobster/analysis-runner.lobster --args-json '{"request":"分析这个项目 https://github.com/affaan-m/everything-claude-code"}'
+lobster run workflows/analysis-runner.lobster --args-json '{"request":"分析这个项目 https://github.com/affaan-m/everything-claude-code"}'
 ```
 
-## 6. Read the result
+## 7. Read the result
 
 Get the latest task:
 
 ```bash
-node --import tsx src/lobster/cli.ts list
+node --import tsx src/cli/cli.ts list
 ```
 
 Render the delivery:
 
 ```bash
-node --import tsx src/lobster/delivery-cli.ts <taskId>
+node --import tsx src/cli/delivery-cli.ts <taskId>
+```
+
+## 8. Local data directory
+
+This starter kit writes task data into:
+
+```bash
+.analysis-runner-kit-data/
 ```
 
 ## Notes
 
-This kit is currently shareable for developers, not yet fully standalone for end users.
+This kit is now runnable as a standalone starter kit for developers, but it is still not a fully productized plugin.
+
+Extraction status in short:
+
+- the minimal workflow, CLI, analysis path, local task store, and delivery renderer are already inside this repo
+- deeper runtime-native orchestration and more productized packaging are still future work

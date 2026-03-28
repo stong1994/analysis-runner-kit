@@ -9,10 +9,11 @@ This kit packages the current analysis workflow into a form that is easier to sh
 Current shape:
 
 - workflow file: `workflows/analysis-runner.lobster`
-- implementation source: currently still lives in `openclaw-control-center/src/lobster/*`
+- core implementation: `src/core/*`
+- CLI entrypoints: `src/cli/*`
 - runtime dependency: OpenClaw + Lobster plugin + Lobster CLI
 
-This is a **starter kit / alpha package**, not yet a fully standalone product.
+This is now a **runnable starter kit**, though it is still not a fully productized standalone plugin.
 
 ## What it can do today
 
@@ -22,6 +23,7 @@ This is a **starter kit / alpha package**, not yet a fully standalone product.
 - detect project archetype
 - sample key entrypoints
 - produce a structured first-pass analysis
+- add reviewer challenge notes
 - render Discord-friendly delivery output
 
 ## Required dependencies
@@ -30,7 +32,7 @@ This is a **starter kit / alpha package**, not yet a fully standalone product.
 2. OpenClaw Lobster plugin enabled
 3. Lobster CLI installed
 4. Node.js 20+
-5. The `openclaw-control-center` project in the same workspace
+5. npm available
 
 ## Enable Lobster plugin
 
@@ -39,8 +41,6 @@ Check the plugin config and enable:
 - `plugins.entries.lobster.enabled = true`
 
 ## Install Lobster CLI
-
-Current known package:
 
 ```bash
 npm install -g @clawdbot/lobster
@@ -52,26 +52,71 @@ Verify:
 lobster --help
 ```
 
-## Current workflow file
+## Install this starter kit
 
-Run from the `openclaw-control-center` directory:
+From the kit directory:
 
 ```bash
-lobster run lobster/analysis-runner.lobster --args-json '{"request":"分析这个项目 https://github.com/owner/repo"}'
+npm install
 ```
+
+## Run the workflow
+
+From the `analysis-runner-kit` directory:
+
+```bash
+lobster run workflows/analysis-runner.lobster --args-json '{"request":"分析这个项目 https://github.com/owner/repo"}'
+```
+
+## Read the result
+
+List tasks:
+
+```bash
+node --import tsx src/cli/cli.ts list
+```
+
+Render the latest delivery:
+
+```bash
+node --import tsx src/cli/delivery-cli.ts <taskId>
+```
+
+## Extraction boundary
+
+Already extracted into this kit:
+
+- `workflows/analysis-runner.lobster`
+- `src/core/store.ts`
+- `src/core/analysis-pipeline.ts`
+- `src/core/finalize.ts`
+- `src/core/repo-ingest.ts`
+- `src/core/repo-analysis.ts`
+- `src/core/reviewer-challenge.ts`
+- `src/core/delivery.ts`
+- minimal CLI entrypoints under `src/cli/*`
+- local task data storage under `.analysis-runner-kit-data/`
+
+Not fully extracted yet / still incomplete at the product boundary:
+
+- runtime-native multi-step orchestration beyond the current bridge workflow shape
+- deeper failure/retry/recovery hardening for production use
+- richer reviewer evidence challenge and deeper code-reading coverage
+- broader packaging work if this should become a standalone npm package or OpenClaw plugin
+- complete decoupling from the broader OpenClaw + Lobster runtime dependency model
 
 ## Current limitations
 
-- implementation still depends on `openclaw-control-center/src/lobster/*`
-- not yet split into a standalone npm package or plugin
 - still a bridge workflow, not a fully native multi-step subagent workflow
 - analysis is currently first-pass / code-aware first-pass, not full deep code review
+- result rendering is optimized for Discord text delivery, not yet interactive components
+- task storage is local to `.analysis-runner-kit-data/`
 
 ## Recommended next packaging step
 
-Move the reusable logic into a standalone package, for example:
+Move the reusable logic into a cleaner standalone package boundary, for example:
 
 - `packages/analysis-runner-core`
-- or a dedicated repo: `analysis-runner-kit`
+- or continue evolving this repo into a standalone public starter kit
 
-Then let the Lobster workflow call the shared package entrypoints instead of project-local source paths.
+Then separate runtime-agnostic analysis logic from OpenClaw/Lobster-specific workflow wiring.
