@@ -1,5 +1,7 @@
 # Analysis Runner Kit
 
+中文说明：`README.zh-CN.md`
+
 A shareable starter kit for the Lobster-based `analysis runner` built on top of OpenClaw.
 
 ## What this is
